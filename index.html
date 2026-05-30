@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rivaa Jewels | Traditional Maharashtrian Jewellery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #b89346;
+      --bg: #fffefa;
+      --accent: #2f2410;
+      --grey: #f9f6ef;
+      --shadow: 0 3px 24px #cbb27c27;
+    }
+    * { box-sizing: border-box; margin:0; padding:0;}
+    body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--accent); }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* NAVIGATION */
+    header {
+      background: #fff;
+      box-shadow: 0 2px 10px #dec57c14;
+      position:sticky;
+      top:0; left:0; z-index:99;
+    }
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      max-width: 1200px;
+      margin:0 auto;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2em;
+      color: var(--gold);
+      letter-spacing: 1.4px;
+      font-weight: bold;
+    }
+    .main-nav {
+      list-style:none; display: flex; gap:36px; align-items: center;
+    }
+    .main-nav > li { position:relative; }
+    .main-nav a {
+      font-weight:600;
+      color: var(--accent);
+      transition:.2s;
+      padding:6px 0;
+      font-size: 1em;
+      display: block;
+    }
+    .main-nav a:hover { color:var(--gold); }
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 33px;
+      left: 0;
+      background: #fff;
+      min-width: 160px;
+      box-shadow: var(--shadow);
+      border-radius: 0 0 8px 8px;
+    }
+    .main-nav li:hover .dropdown {
+      display: block;
+    }
+    .dropdown a {
+      display:block;
+      padding:12px 18px;
+      font-weight:400;
+    }
+    .dropdown a:hover {
+      background: var(--grey);
+      color: var(--gold);
+    }
+    /*menu*/
+    .nav-toggle { display:none; }
+    @media (max-width:860px) {
+      .navbar { padding: 15px 10px;}
+      .main-nav { 
+        position: absolute;
+        top:60px; left:0; right:0;
+        background: #fff;
+        flex-direction: column;
+        gap: 0;
+        overflow: hidden;
+        max-height:0;
+        transition: max-height .32s cubic-bezier(.23,1.63,.79,1);
+        box-shadow: var(--shadow);
+      }
+      .main-nav.open { max-height: 320px;}
+      .main-nav > li { width: 100%; }
+      .main-nav a {padding:14px 20px;}
+      .dropdown { position: static; box-shadow:none;}
+    }
+    .nav-toggle {
+      display:none;
+      flex-direction: column;
+      cursor:pointer;
+      width: 28px; height: 32px;
+      justify-content: center;
+      align-items: flex-end;
+      margin-left:18px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 100%;
+      height: 4px;
+      background: var(--gold);
+      margin: 4px 0;
+      border-radius: 2px;
+      transition:.2s;
+    }
+    @media (max-width:860px) { .nav-toggle{display: flex;} }
+
+    /* HERO SLIDER */
+    .hero {
+      background: var(--grey);
+      overflow: hidden;
+      position:relative;
+      min-height: 55vw;
+      min-height: 380px;
+      max-height: 580px;
+      margin-top:0;
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
+    }
+    .slides {
+      position:relative;
+      width:100%;
+      height:100%;
+    }
+    .slide {
+      position: absolute;
+      inset:0;
+      opacity:0;
+      transition: opacity .6s;
+      display:flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 60px;
+      min-height: 380px;
+      z-index:1;
+    }
+    .slide.active { opacity:1; z-index: 20;}
+    .slide-bg {
+      position: absolute;
+      inset:0;
+      width:100%; height:100%;
+      object-fit: cover;
+      z-index: 1;
+      opacity:0.85;
+      pointer-events:none;
+      border-radius:0 0 8px 8px;
+    }
+    .slide-content {
+      position:relative;
+      z-index:4;
+      background: rgba(255,255,250,0.77);
+      border-radius: 15px;
+      padding:36px 42px;
+      box-shadow: 0 2px 24px #7d62214c;
+      max-width:410px;
+      margin-top:56px;
+    }
+    .slide-content h1 {
+      font-family: 'Playfair Display',serif;
+      font-size:2.2em;
+      color:var(--gold);
+      margin-bottom: 13px;
+    }
+    .slide-content p { font-size:1.14em;}
+    .slider-nav {
+      position:absolute;bottom:15px;left:50%;transform:translateX(-50%);
+      z-index:30;
+      display: flex;gap:12px;
+    }
+    .slider-dot {
+      width:13px; height:13px;
+      border-radius:50%; background: #fff;
+      border:2px solid var(--gold);
+      cursor:pointer;
+      opacity: .7;
+      transition:.2s;
+    }
+    .slider-dot.active {background: var(--gold); opacity:1;}
+    @media (max-width:860px) {
+      .slide-content{padding:13px 14px;}
+      .slide {padding-left:8vw; min-height:260px;}
+      .slider-nav{bottom:6px;}
+    }
+    @media (max-width:600px) {
+      .slide-content{max-width:85vw;}
+      .slide{padding-left:2vw;}
+    }
+
+    /* COLLECTIONS/CATEGORIES */
+    .categories-section {
+      max-width:1180px;
+      margin:55px auto 40px;
+      padding:0 10px;
+    }
+    .categories-title {
+      text-align:center;
+      color:var(--gold);
+      font-family: 'Playfair Display',serif;
+      font-size:1.7em;
+      margin-bottom:28px;
+    }
+    .categories-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap:28px;
+    }
+    .category-card {
+      background:#fff;
+      border-radius:13px;
+      box-shadow:0 2px 14px #ebdfc728;
+      text-align:center;
+      padding-bottom:17px;
+      overflow:hidden;
+      transition:.23s;
+      border:1.5px solid #f4ece0;
+    }
+    .category-card:hover {
+      box-shadow:0 8px 36px #cbb27c25;
+      transform: scale(1.025);
+      border-color:var(--gold);
+    }
+    .category-card img {
+      width:100%; height:165px; object-fit:cover; border-radius:0 0 9px 9px;
+    }
+    .category-card h3 { font-size:1.13em; margin:12px 0 3px;color:var(--accent);}
+    .category-card a {color:var(--gold); font-size:.98em;}
+    .category-card a:hover {text-decoration:underline;}
+    
+    /* FEATURED PRODUCTS */
+    .products-section {
+      background:var(--grey);
+      margin:70px 0 60px 0;
+      padding:64px 0 58px 0;
+      box-shadow: var(--shadow);
+    }
+    .products-title {
+      text-align:center;
+      font-family: 'Playfair Display',serif;
+      color:var(--gold);
+      font-size:1.6em;
+      margin-bottom:28px;
+    }
+    .products-grid {
+      display:grid;
+      max-width:1150px;
+      margin:0 auto;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:26px;
+      padding:0 24px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius:13px;
+      box-shadow:0 2px 14px #cfb36c24;
+      padding-bottom:13px;
+      overflow:hidden;
+      transition:.17s;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      border:1px solid #f2e9d9;
+    }
+    .product-card:hover {
+      box-shadow:0 8px 28px #b8954725;
+      border-color: var(--gold);
+      z-index:2;
+    }
+    .product-card img {height:170px;object-fit:cover;width:100%;}
+    .product-card h4 {font-size:1.08em; margin:14px 0 2px 0;}
+    .product-card .desc {font-size:.96em;color:#8b6b2e;margin-bottom:7px;}
+    .product-card .price {
+      font-weight:bold; color:var(--gold);font-size:1em;
+    }
+    .product-card a {
+      display:inline-block;
+      margin-top:7px;
+      color:var(--accent);
+      font-size:.96em;
+      text-decoration:underline dotted;
+      font-weight:600;
+    }
+    .product-card a:hover {color:var(--gold);}
+    @media (max-width:700px){
+      .categories-grid, .products-grid { grid-template-columns:1fr; }
+      .products-section{padding:30px 0;}
+    }
+    /* NEWSLETTER */
+    .newsletter-section {
+      background: var(--gold);
+      color: #fff;
+      padding: 54px 0 56px 0;
+      text-align: center;
+      border-radius:0 0 24px 24px;
+    }
+    .newsletter-section h2 {
+      margin-bottom: 11px;
+      font-family: 'Playfair Display',serif;
+    }
+    .newsletter-section p {margin-bottom:16px;}
+    .newsletter-form {
+      display: flex;
+      justify-content: center;
+      max-width:370px;
+      margin:0 auto;
+      gap:0;
+    }
+    .newsletter-form input[type="email"] {
+      padding:10px;
+      border-radius:7px 0 0 7px;
+      border:none;
+      outline:none;
+      font-size:1em;
+      flex:1;
+    }
+    .newsletter-form button {
+      background: var(--accent);
+      color:#fff;
+      border:none;
+      padding:10px 24px;
+      border-radius:0 7px 7px 0;
+      font-size:1em;
+      font-weight: bold;
+      cursor:pointer;
+      transition:.2s;
+    }
+    .newsletter-form button:hover { background: #fff; color: var(--gold);}
+    .newsletter-status { margin-top:13px; color:#fffbe2;}
+
+    /* FOOTER */
+    footer {
+      background: var(--accent);
+      color: #e9e6c7;
+      padding:40px 0 16px 0;
+      font-size:.98em;
+      margin-top:42px;
+    }
+    .footer-content {
+      max-width:1200px;
+      margin:0 auto;
+      display: flex;
+      flex-wrap:wrap;
+      gap:30px;
+      justify-content:space-between;
+      align-items: flex-start;
+      padding:0 16px;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 2.1em;
+      margin-bottom:14px;
+    }
+    .footer-links, .footer-backlinks, .footer-social {
+      margin-bottom:21px;
+    }
+    .footer-links a, .footer-backlinks a {
+      color: #fffbe2;
+      margin-right:14px;
+      font-size:1.03em;
+      display:block;
+      margin-bottom:5px;
+    }
+    .footer-links a:hover, .footer-backlinks a:hover {
+      text-decoration: underline;
+      color: var(--gold);
+    }
+    .footer-social a {
+      display: inline-block;
+      margin-right:9px;
+      color: #fffbe2;
+      font-size:1.7em;
+      transition:.2s;
+    }
+    .footer-social a:hover { color:var(--gold);}
+    .footer-low {
+      text-align:center;
+      color: #d7c591;
+      border-top:1px solid #a89861;
+      padding-top:6px;
+      margin-top:12px;
+      font-size:.97em;
+    }
+    @media (max-width:700px) {
+      .footer-content {flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+  <!-- Twitter, Facebook, Insta SVG icons -->
+</head>
+<body>
+  <!-- NAVIGATION -->
+  <header>
+    <div class="navbar">
+      <div class="logo"> <a href="#">Rivaa Jewels</a></div>
+      <div class="nav-toggle" id="navToggle" tabindex="0" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </div>
+      <ul class="main-nav" id="mainNav">
+        <li><a href="#">Home</a></li>
+        <li>
+          <a href="#">Collections</a>
+          <ul class="dropdown">
+            <li><a href="#category-nath">Nath</a></li>
+            <li><a href="#category-thushi">Thushi</a></li>
+            <li><a href="#category-mohanmala">Mohan Mala</a></li>
+            <li><a href="#category-tanmani">Tanmani</a></li>
+          </ul>
+        </li>
+        <li><a href="#featured">Featured</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#blogs">Blogs</a></li>
+        <li><a href="#contact-footer">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- HERO SLIDER -->
+  <section class="hero" id="hero">
+    <div class="slides" id="slides">
+      <div class="slide active">
+        <img class="slide-bg" src="C:\Users\Admin\Desktop\rivaajewels.com\s1.png?w=1200" alt="Hero Maharashtrian Jewellery" loading="lazy"/>
+        <div class="slide-content">
+          <h1>Traditional Maharashtrian Elegance</h1>
+          <p>Handcrafted naths, thushi, tanmani and more - embrace heritage for every celebration.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img class="slide-bg" src="C:\Users\Admin\Desktop\rivaajewels.com\s2.png?w=1200" alt="Bridal" loading="lazy"/>
+        <div class="slide-content">
+          <h1>Bridal Radiance Redefined</h1>
+          <p>Adorn your wedding with bespoke pieces reflecting timeless grace and artistry.</p>
+        </div>
+      </div>
+      <div class="slide">
+        <img class="slide-bg" src="C:\Users\Admin\Desktop\rivaajewels.com\s3.png?auto=format&w=1200&q=80" alt="Everyday wear" loading="lazy"/>
+        <div class="slide-content">
+          <h1>Everyday Royalty</h1>
+          <p>Lightweight, exquisite designs – tradition for the modern Maharashtrian woman.</p>
+        </div>
+      </div>
+    </div>
+    <div class="slider-nav" id="sliderNav">
+      <span class="slider-dot active" data-slide="0"></span>
+      <span class="slider-dot" data-slide="1"></span>
+      <span class="slider-dot" data-slide="2"></span>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="categories-section" id="collections">
+    <div class="categories-title">Our Signature Collections</div>
+    <div class="categories-grid">
+      <div class="category-card" id="category-nath">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\nath1.png?w=800" alt="Nath">
+        <h3>Nath</h3>
+        <a href="#featured">View Nath Designs &rarr;</a>
+      </div>
+      <div class="category-card" id="category-thushi">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\thushi.png?w=800" alt="Thushi">
+        <h3>Thushi</h3>
+        <a href="#featured">View Thushi Collection &rarr;</a>
+      </div>
+      <div class="category-card" id="category-mohanmala">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\mohanmal.png?w=800" alt="Mohan Mala">
+        <h3>Mohan Mala</h3>
+        <a href="#featured">View Mohan Mala &rarr;</a>
+      </div>
+      <div class="category-card" id="category-tanmani">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\saaj.png?w=800" alt="saaj">
+        <h3>Kolhapuri Saaj</h3>
+        <a href="#featured">View Kolhapuri Saaj &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="products-section" id="featured">
+    <div class="products-title">Featured Creations</div>
+    <div class="products-grid">
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\nath1.png?w=800" alt="Pearl Nath"/>
+        <h4>Pearl Nath</h4>
+        <div class="desc">Classic pearls & gemstone for festival beauty.</div>
+        <div class="price">₹290</div>
+        <a href="#">Shop Now</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\thushi.png?w=800" alt="Gold Thushi"/>
+        <h4>Kolhapuri Thushi</h4>
+        <div class="desc">Antitarnish golden beaded Thushi necklace for authentic look.</div>
+        <div class="price">₹600</div>
+        <a href="#">Shop Now</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\mohanmal.png?w=800" alt="Mohan Mala"/>
+        <h4>Mohan Mala</h4>
+        <div class="desc">Multi-layer elegant mala, ideal for weddings.</div>
+        <div class="price">₹400</div>
+        <a href="#">Shop Now</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\saaj.png?w=800" alt="Kolhapuri Saaj"/>
+        <h4>Kolhapuri Saaj</h4>
+        <div class="desc">Antitarnish Kolhapuri Saaj with timeless traditional design.</div>
+        <div class="price">₹1,700</div>
+        <a href="#">Shop Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT US -->
+  <section class="newsletter-section" id="about">
+    <h2>About Rivaa Jewels</h2>
+    <p>Preserving the rich heritage of Maharashtrian jewelry since 2020. Each piece is handcrafted with passion, honoring traditional designs while embracing contemporary elegance. We celebrate the cultural significance of Nath, Thushi, Mohan Mala, and Tanmani—symbols of grace and tradition.</p>
+  </section>
+
+  <!-- BLOGS -->
+  <section class="products-section" id="blogs">
+    <div class="products-title">Latest from Our Blog</div>
+    <div class="products-grid">
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\nathblog.png?w=800" alt="Understanding Nath"/>
+        <h4>The Art of Wearing Nath</h4>
+        <div class="desc">Learn the traditional significance and styling tips for the iconic nose ring.</div>
+        <a href="#">Read More</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\thushiblog.png?w=800" alt="Thushi Heritage"/>
+        <h4>Thushi: A Symbol of Heritage</h4>
+        <div class="desc">Discover the cultural importance of this traditional beaded necklace through history.</div>
+        <a href="#">Read More</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\mmblog.png?w=800" alt="Wedding Jewelry"/>
+        <h4>Mohan Mala for Your Big Day</h4>
+        <div class="desc">Explore how to choose the perfect multi-layered mala for your wedding celebrations.</div>
+        <a href="#">Read More</a>
+      </div>
+      <div class="product-card">
+        <img src="C:\Users\Admin\Desktop\rivaajewels.com\careblog.png?w=800" alt="Pearl Care"/>
+        <h4>Caring for Your Jewelry</h4>
+        <div class="desc">Essential tips to maintain and preserve the beauty of your precious pieces.</div>
+        <a href="#">Read More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content" id="contact-footer">
+      <div>
+        <div class="footer-logo">Rivaa Jewels</div>
+        <div>
+          Preserving Maharashtrian tradition through timeless ornaments.<br>
+          <b>Email:</b> <a href="mailto:jewelsrivaa@gmail.com" style="color:#f8dfa2">jewelsrivaa@gmail.com</a><br>
+          <b>Phone:</b> <a href="tel:917385806674" style="color:#f8dfa2">+91 73858 06674</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <b>Quick Links</b>
+        <a href="#collections">Collections</a>
+        <a href="#featured">Featured</a>
+        <a href="#about">About Us</a>
+        <a href="#blogs">Blogs</a>
+       
+      </div>
+      
+      <div class="footer-social">
+        <b>Follow Us</b><br>
+
+        <a href="https://instagram.com/rivaa_jewels_?MWlxMzVzYTB2aHgy" target="_blank" title="Instagram">
+          <!-- Instagram SVG -->
+          <svg width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 2h9A5.51 5.51 0 0 1 22 7.5v9A5.51 5.51 0 0 1 16.5 22h-9A5.51 5.51 0 0 1 2 16.5v-9A5.51 5.51 0 0 1 7.5 2Zm0 1.5A4 4 0 0 0 3.5 7.5v9A4 4 0 0 0 7.5 20.5h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4Zm4.5 2.25A5.25 5.25 0 1 1 6.75 11A5.25 5.25 0 0 1 12 5.75Zm0 1.5A3.75 3.75 0 1 0 15.75 11A3.75 3.75 0 0 0 12 7.25ZM18.1 7.1a1.1 1.1 0 1 1-1.1 1.1a1.1 1.1 0 0 1 1.1-1.1Z"/></svg>
+        </a>
+        <a href="https://facebook.com/share/1EgA5X7i1e/" target="_blank" title="Facebook">
+          <svg width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M19.07 2H4.93A2.92 2.92 0 0 0 2 4.93v14.14A2.92 2.92 0 0 0 4.93 22h7.58v-6.62h-2.23v-2.58h2.23v-1.77c0-2.2 1.34-3.39 3.28-3.39.94 0 1.95.17 1.95.17v2.13h-1.1c-1.09 0-1.43.68-1.43 1.38v1.48h2.45l-.39 2.58h-2.06V22h4.06A2.92 2.92 0 0 0 22 19.07V4.93A2.92 2.92 0 0 0 19.07 2Z"/></svg>
+        </a>
+        <a href="https://x.com/RivaaJewels" target="_blank" title="X">
+          <svg width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M21.54 7.14c.01.14.01.29.01.43c0 4.43-3.37 9.54-9.54 9.54a9.5 9.5 0 0 1-5.14-1.51c.32.04.64.06.98.06a6.7 6.7 0 0 0 4.13-1.42a3.37 3.37 0 0 1-3.14-2.34c.2.03.4.05.61.05c.3 0 .59-.04.86-.11a3.36 3.36 0 0 1-2.7-3.3v-.04c.45.25.96.4 1.51.42a3.36 3.36 0 0 1-1.04-4.48a9.54 9.54 0 0 0 6.92 3.51a3.38 3.38 0 0 1 5.74-3.08a6.79 6.79 0 0 0 2.14-.82a3.39 3.39 0 0 1-1.48 1.87a6.72 6.72 0 0 0 1.94-.53a7 7 0 0 1-1.69 1.76Z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-low">&copy; 2026 Rivaa Jewels.| All Rights Reserved.</div>
+  </footer>
+ 
+  <script>
+    // Responsive nav menu
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    navToggle.onclick = () => mainNav.classList.toggle('open');
+
+    // Hero slider logic
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dots = Array.from(document.querySelectorAll('.slider-dot'));
+    let currentSlide = 0;
+    function showSlide(idx) {
+      slides.forEach((s,i)=>s.classList.toggle('active',i===idx));
+      dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+      currentSlide = idx;
+    }
+    dots.forEach((dot,i)=>dot.onclick=()=>showSlide(i));
+    setInterval(()=>showSlide((currentSlide+1)%slides.length), 4800);
+  </script>
+</body>
+</html>
